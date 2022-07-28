@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ekassir.amraModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "ekassir.amra.dbo.gateAlias" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="gateAlias">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="row_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="alias" Type="varchar" MaxLength="100" />
+          <Property Name="FI_Check" Type="varchar" MaxLength="1000" />
+          <Property Name="FO_Check" Type="varchar" MaxLength="1000" />
+          <Property Name="FI_Init" Type="varchar" MaxLength="1000" />
+          <Property Name="FI_Process" Type="varchar" MaxLength="1000" />
+          <Property Name="FO_Process" Type="varchar" MaxLength="1000" />
+          <Property Name="FI_CheckNG" Type="bit" />
+          <Property Name="FO_CheckNG" Type="bit" />
+          <Property Name="FI_ProcessNG" Type="bit" />
+          <Property Name="FO_ProcessNG" Type="bit" />
+          <Property Name="FX_Check" Type="varchar(max)" />
+          <Property Name="FX_Process" Type="varchar(max)" />
+          <Property Name="FX_CheckNG" Type="bit" />
+          <Property Name="FX_ProcessNG" Type="bit" />
+        </EntityType>
+        <EntityContainer Name="Хранилище ekassiramraModelContainer">
+          <EntitySet Name="gateAlias" EntityType="Self.gateAlias" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [gateAlias].[row_id] AS [row_id], 
+    [gateAlias].[alias] AS [alias], 
+    [gateAlias].[FI_Check] AS [FI_Check], 
+    [gateAlias].[FO_Check] AS [FO_Check], 
+    [gateAlias].[FI_Init] AS [FI_Init], 
+    [gateAlias].[FI_Process] AS [FI_Process], 
+    [gateAlias].[FO_Process] AS [FO_Process], 
+    [gateAlias].[FI_CheckNG] AS [FI_CheckNG], 
+    [gateAlias].[FO_CheckNG] AS [FO_CheckNG], 
+    [gateAlias].[FI_ProcessNG] AS [FI_ProcessNG], 
+    [gateAlias].[FO_ProcessNG] AS [FO_ProcessNG], 
+    [gateAlias].[FX_Check] AS [FX_Check], 
+    [gateAlias].[FX_Process] AS [FX_Process], 
+    [gateAlias].[FX_CheckNG] AS [FX_CheckNG], 
+    [gateAlias].[FX_ProcessNG] AS [FX_ProcessNG]
+    FROM [dbo].[gateAlias] AS [gateAlias]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ekassir.amraModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="gateAlias">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="row_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="alias" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FI_Check" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="FO_Check" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="FI_Init" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="FI_Process" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="FO_Process" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="FI_CheckNG" Type="Boolean" />
+          <Property Name="FO_CheckNG" Type="Boolean" />
+          <Property Name="FI_ProcessNG" Type="Boolean" />
+          <Property Name="FO_ProcessNG" Type="Boolean" />
+          <Property Name="FX_Check" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FX_Process" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FX_CheckNG" Type="Boolean" />
+          <Property Name="FX_ProcessNG" Type="Boolean" />
+        </EntityType>
+        <EntityContainer Name="baseConnection" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="gateAlias" EntityType="Self.gateAlias" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ekassiramraModelContainer" CdmEntityContainer="baseConnection">
+          <EntitySetMapping Name="gateAlias">
+            <EntityTypeMapping TypeName="ekassir.amraModel.gateAlias">
+              <MappingFragment StoreEntitySet="gateAlias">
+                <ScalarProperty Name="row_id" ColumnName="row_id" />
+                <ScalarProperty Name="alias" ColumnName="alias" />
+                <ScalarProperty Name="FI_Check" ColumnName="FI_Check" />
+                <ScalarProperty Name="FO_Check" ColumnName="FO_Check" />
+                <ScalarProperty Name="FI_Init" ColumnName="FI_Init" />
+                <ScalarProperty Name="FI_Process" ColumnName="FI_Process" />
+                <ScalarProperty Name="FO_Process" ColumnName="FO_Process" />
+                <ScalarProperty Name="FI_CheckNG" ColumnName="FI_CheckNG" />
+                <ScalarProperty Name="FO_CheckNG" ColumnName="FO_CheckNG" />
+                <ScalarProperty Name="FI_ProcessNG" ColumnName="FI_ProcessNG" />
+                <ScalarProperty Name="FO_ProcessNG" ColumnName="FO_ProcessNG" />
+                <ScalarProperty Name="FX_Check" ColumnName="FX_Check" />
+                <ScalarProperty Name="FX_Process" ColumnName="FX_Process" />
+                <ScalarProperty Name="FX_CheckNG" ColumnName="FX_CheckNG" />
+                <ScalarProperty Name="FX_ProcessNG" ColumnName="FX_ProcessNG" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
