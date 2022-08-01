@@ -32,11 +32,22 @@ namespace Provider.Model
         /// <param name="inContext"></param>
         public static void ReadContext<T>(T inContext) where T : Hashtable
         {
-            foreach(PropertyInfo propGlbCon in typeof(GlobalContainer).GetProperties())
-            {
-                object outerPropertyValue = propGlbCon.PropertyType.GetConstructor(new Type[] { }).Invoke(new object[] { });
+            var GlbConAll = typeof(GlobalContainer).GetProperties();
 
-                foreach (PropertyInfo propInnerObject in propGlbCon.PropertyType.GetProperties())
+            //Обходим каждое свойство в классе GlobalContainer
+            foreach (PropertyInfo propGlbCon in GlbConAll)
+            {
+                //ссылка на статичное свойство имеющая тип созданного экземпляра, либо нулл 
+                var refPropGlbCon = propGlbCon.GetValue(propGlbCon);
+
+                var typePropGlbCon = propGlbCon.PropertyType;
+
+                //Если свойство равно нулл то создаем экземпляр объекта в статичном свойстве, для последующего заполнения, иначе передаем уже созданный экземпляр
+                object outerPropertyValue = refPropGlbCon == null ? typePropGlbCon.GetConstructor(new Type[] { }).Invoke(new object[] { }) : refPropGlbCon;
+
+
+                //Обходим каждое свойство, вложенного свойства класса GlobalContainer
+                foreach (PropertyInfo propInnerObject in typePropGlbCon.GetProperties())
                 {
                     object Name = null;
                     if (typeof(T) == typeof(Hashtable))
@@ -58,10 +69,12 @@ namespace Provider.Model
 
                     propInnerObject.SetValue(outerPropertyValue, innerPropertyValue, null);
                 }
-                propGlbCon.SetValue(typeof(GlobalContainer).GetProperties() , outerPropertyValue , null);
+
+                if (outerPropertyValue == null)
+                    continue;
+                propGlbCon.SetValue(typeof(GlobalContainer).GetProperties(), outerPropertyValue, null);
             }
         }
-
         /// <summary>
         /// Запись в контекст значения объектов из GlobalContainer
         /// </summary>
