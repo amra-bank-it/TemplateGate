@@ -79,27 +79,28 @@ namespace Provider.Model
         /// Запись в контекст значения объектов из GlobalContainer
         /// </summary>
         /// <param name="inContext"></param>
-        public static void WriteContext(ref Context inContext)
-        {
+     public static void WriteContext(ref Context inContext)
+            {
             PropertyInfo[] propGC = typeof(GlobalContainer).GetProperties();
             foreach (PropertyInfo prop in propGC)
             {
-                var currentType = prop.GetType();
-                ObjectToContext(currentType, ref inContext);
+                var refPropGlbCon = prop.GetValue(prop);
+
+                var currentType = refPropGlbCon.GetType();
+                ObjectToContext(currentType, ref inContext, refPropGlbCon);
             }
         }
-        private static void ObjectToContext(Type inType, ref Context inContext)
+        private static void ObjectToContext(Type inType, ref Context inContext,object refPropGlbCon)
         {
             PropertyInfo[] propCurrent = inType.GetProperties();
 
             foreach (PropertyInfo prop in propCurrent)
             {
                 var Name = PaymentContext(prop.Name);
-                var Value = prop.GetValue(prop);
+                var Value = prop.GetValue(refPropGlbCon);
                 inContext[Name] = Value;
             }
         }
-
         public static string PaymentContext(string field)
         {
             if ("Account,Value,Id,Serial,Number,Total,".IndexOf(field + ",") >= 0)
