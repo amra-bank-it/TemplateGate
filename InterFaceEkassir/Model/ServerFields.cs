@@ -11,7 +11,7 @@ namespace Provider.Model
     /// </summary>
     public class ServerFields
     {
-        public string Account { get; set; }
+        public string account { get; set; }
         public decimal Value { get; set; }
         public decimal Total { get; set; }
         public decimal Fee { get; set; }
