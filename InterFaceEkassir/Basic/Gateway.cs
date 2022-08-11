@@ -2,30 +2,39 @@
 using IBP.SDKGatewayLibrary;
 using System.Collections;
 using Provider.Model;
+using ComplexLogger;
+using System.Reflection;
+using InterFaceEkassir.Setting.LoggerPlace;
 
 namespace Provider
 {
-    public static class DebugMode
-    {
-        public static bool ON;
-    }
-    public  class GatewayCore : GatewayCoreBase
+    public class GatewayCore : GatewayCoreBase
     {
 
         public override void InitGateway(Hashtable settings)
         {
             // TODO: Выполнить инициализацию шлюза.
-            GlobalContainer.ReadContext(settings);
+            GlobalContainer.ContextToGlobalContainer(settings);
 
             switch (GlobalContainer.settFields.TraceLog)
             {
-                case 0:  break;
-                case 1:  break;
-                default: break;
-            }        
+                case 1: MeLogger.Init(informationPrint.Trace); break;
+                default: MeLogger.Init(informationPrint.Release); break;
+            }
+        }
 
-        }    
+        public void InitGateway(Hashtable settings, sourcePrint prints = sourcePrint.Ekassir)
+        {
+            // TODO: Выполнить инициализацию шлюза.
+            MeLogger.Init(informationPrint.Trace, prints);
+            GlobalContainer.ContextToGlobalContainer(settings);
 
+            switch (GlobalContainer.settFields.TraceLog)
+            {
+                case 1: MeLogger.Init(informationPrint.Trace, prints); break;
+                default: MeLogger.Init(informationPrint.Release, prints); break;
+            }
+        }
 
         /// <summary>
         /// Выполнение стадий проверки у поставщика
@@ -33,14 +42,72 @@ namespace Provider
         /// <param name="context"></param>
         public override void CheckAccount(ref Context context)
         {
-            
-            GlobalContainer.ReadContext(context);
+
+            Tracing.Context(context, MethodBase.GetCurrentMethod().Name);
+
+            GlobalContainer.ContextToGlobalContainer(context);
+
+            TracingAccInRealese(MethodBase.GetCurrentMethod().Name);
+
+
+
+
+            try
+            {
+                
+            }
+            catch (Exception err)
+            {
+                context.Description = "" + err.ToString();
+                context.Status = State.AccountNotExists;
+                TracingAccInRealese(MethodBase.GetCurrentMethod().Name, context);
+                GlobalContainer.WriteContext(ref context);
+                return;
+            }
+
             GlobalContainer.WriteContext(ref context);
+            context.Description = "OK";
+            context.Status = State.AccountExists;
+            TracingAccInRealese(MethodBase.GetCurrentMethod().Name, context);
         }
-       
+
+        private static void TracingAccInRealese(string typeMethod)
+        {
+            MeLogger.WriteMessage($"Стадия Проверки Аккаунта {GlobalContainer.srvFields.Account}", informationPrint.Release);
+        }
+
+        private static void TracingAccInRealese(string typeMethod, Context context)
+        {
+            MeLogger.WriteMessage($"Результат Стадии Проверки Аккаунта {GlobalContainer.srvFields.Account}:{context.Status.ToString()}/Описание:{context.Description}", informationPrint.Release);
+        }
 
         public override void Process(ref Context context)
         {
+            Tracing.Context(context, "Process");
+
+            GlobalContainer.ContextToGlobalContainer(context);
+
+            TracingAccInRealese(MethodBase.GetCurrentMethod().Name);
+
+            
+            try
+            {
+                
+            }
+            catch (Exception err)
+            {
+                context.Description = "" + err.ToString();
+                context.Status = State.Rejected;
+                TracingAccInRealese(MethodBase.GetCurrentMethod().Name, context);
+                GlobalContainer.WriteContext(ref context);
+                return;
+            }
+
+
+            GlobalContainer.WriteContext(ref context);
+            context.Description = "OK";
+            context.Status = State.Finalized;
+            TracingAccInRealese(MethodBase.GetCurrentMethod().Name, context);
 
         }
 
@@ -106,37 +173,4 @@ namespace Provider
 
     }
 
-}
-namespace ComplexLogger
-{
-    public enum L_Mode
-    {
-        TestPlatform
-            , Release
-            , debugFULL
-    }
-    public static class mLogger
-    {
-        public static L_Mode mode;
-
-        public static void changeMode(L_Mode inmode)
-        {
-            mode = inmode;
-        }
-        public static void WriteMessage(string text)
-        {
-            if (mode == L_Mode.debugFULL)
-            {
-                Logger.Instance.WriteMessage(text, 1); return;
-            }
-            Console.WriteLine(text);
-        }
-        public static void WriteMessageDBG(string text)
-        {
-            if (mode == L_Mode.debugFULL)
-            {
-                Logger.Instance.WriteMessage(text, 1); return;
-            }
-        }
-    }
 }

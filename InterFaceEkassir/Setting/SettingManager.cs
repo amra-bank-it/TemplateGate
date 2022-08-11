@@ -1,9 +1,8 @@
 ﻿using IBP.SDKGatewayLibrary;
-using Provider;
 using Provider.Model;
 using System;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 
 namespace BusinessEkassir_sett
 {
@@ -39,21 +38,24 @@ namespace BusinessEkassir_sett
             //Logger.Instance.WriteMessage("Инициализация  Шлюза", 1);
             // TODO: Заполнить массив строк именами атрибутов конфигурации, необходимых для работы шлюза.
             // Доступ к метабазе екасира
-
             this.parametrGateway = GetFieldsObject(typeof(SettingFields));
+
 
             string[] cliFields = GetFieldsObject(typeof(ClientFields));
             string[] srvFields = GetFieldsObject(typeof(ServerFields));
             string[] cli2srvFields = cliFields.Concat(srvFields).ToArray();
+
+
+
 
             this.argsCheckStage = cli2srvFields;
             this.argsProcessStage = cli2srvFields;
             this.argsCheckProcessStatusStage = cli2srvFields;
 
             //
-            this.argsSaveCheckStage = argsCheckStage;
-            this.argsSaveProcessStage = argsProcessStage;
-            this.argsSaveProcessStatusStage = argsCheckProcessStatusStage;
+            this.argsSaveCheckStage = cliFields;
+            this.argsSaveProcessStage = cliFields;
+            this.argsSaveProcessStatusStage = cliFields;
             //
 
         }
@@ -74,7 +76,7 @@ namespace BusinessEkassir_sett
         }
 
         /// <summary>
-        /// Получить список аргументов контекста, необходимых для выполнения каждой из операции шлюза.
+        /// Получить список аргументов контекста, необходимых для выполнения каждой из операции шлюза.  
         /// </summary>
         /// <param name="operation">
         /// Операция, для которой запрашивается список аргументов контекста.
@@ -90,23 +92,31 @@ namespace BusinessEkassir_sett
             switch (operation)
             {
                 case Operation.CheckAccount:
-                    contextService = this.argsCheckStage;
+                    contextService = this.argsCheckStage.ToArray();
                     break;
 
-                case Operation.Process:                                            
-                    contextService = this.argsProcessStage;
+                case Operation.Process:
+                    contextService = this.argsProcessStage.ToArray();
                     break;
 
                 case Operation.CheckProcessStatus:
-                    contextService = this.argsCheckProcessStatusStage;
+                    contextService = this.argsCheckProcessStatusStage.ToArray();
                     break;
 
                 default:
                     return null;
             }
-
+            ReplaceContextNames(ref contextService);
 
             return contextService;
+        }
+
+        private static void ReplaceContextNames(ref string[] contextService)
+        {
+            for (int i = 0; i < contextService.Length; i++)
+            {
+                contextService[i] = GlobalContainer.PaymentContext(contextService[i]);
+            }
         }
 
         /// <summary>
@@ -128,19 +138,19 @@ namespace BusinessEkassir_sett
             //Logger.Instance.WriteMessage("Получаем переменные для  сохранение в Контекст. Тип Операции:" + operation.ToString(), 1);
             switch (operation)
             {
-                case Operation.CheckAccount:                    
+                case Operation.CheckAccount:
 
-                    contextService = this.argsSaveCheckStage;
+                    contextService = this.argsSaveCheckStage.ToArray();
                     break;
 
-                case Operation.Process:                    
+                case Operation.Process:
 
-                    contextService = this.argsSaveProcessStage;
+                    contextService = this.argsSaveProcessStage.ToArray();
                     break;
 
                 case Operation.CheckProcessStatus:
 
-                    contextService = this.argsSaveProcessStatusStage;
+                    contextService = this.argsSaveProcessStatusStage.ToArray();
                     break;
 
                 default:
@@ -148,6 +158,7 @@ namespace BusinessEkassir_sett
             }
 
 
+            ReplaceContextNames(ref contextService);
 
             return contextService;
         }

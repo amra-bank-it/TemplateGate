@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Basic\Gateway.cs" />
+    <Compile Include="Basic\Tools\Tracing.cs" />
     <Compile Include="Model\ClientFields.cs" />
     <Compile Include="Model\CollectionEnum.cs" />
     <Compile Include="Model\GlobalContainer.cs" />
@@ -86,6 +87,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Setting\LoggerPlace\loggerPlace.cs" />
     <Compile Include="Setting\SettingManager.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
